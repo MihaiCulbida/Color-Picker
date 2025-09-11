@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Picker</title>
+<style>
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f3f4f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    width: auto;
+}
+
+.color-picker-widget {
+    width: 320px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 20px 24px;
+    text-align: center;
+}
+
+.preview {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    background: #94dbff;
+    margin-bottom: 16px;
+    transition: background 0.2s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.hex-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #111827;
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 14px;
+}
+
+.hex-box:hover { background: #f3f4f6; }
+.hex-box small { color: #6b7280; font-size: 12px; }
+input[type="color"] {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+    margin-bottom: 14px;
+}
+
+.tooltip {
+    font-size: 12px;
+    color: #929292;
+    margin-top: 6px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+}
+.tooltip.show { opacity: 1; }
+.file-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    cursor: pointer;
+    font-size: 16px;
+    color: #111827;
+    transition: background 0.2s ease;
+}
+
+.file-button:hover { background: #f3f4f6; }
+.image-box {
+    width: 300px;
+    min-height: 350px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.image-box img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container" id="container">
+  <div class="color-picker-widget">
+    <div class="preview" id="colorPreview"></div>
+    <div class="hex-box" id="hexBox">
+      <span id="hexValue">#94dbff</span>
+      <small>Click to Copy</small>
+    </div>
+
+    <input type="color" id="colorInput" value="#94dbff">
+    <button class="file-button" id="fileButton">Select Images</button>
+    <div class="tooltip" id="tooltip">Copied to clipboard</div>
+  </div>
+
+  <div class="image-box" id="imageBox" style="display: none;"></div>
+</div>
+
+<script>
+const colorInput = document.getElementById('colorInput');
+const colorPreview = document.getElementById('colorPreview');
+const hexValue = document.getElementById('hexValue');
+const hexBox = document.getElementById('hexBox');
+const tooltip = document.getElementById('tooltip');
+const fileButton = document.getElementById('fileButton');
+const imageBox = document.getElementById('imageBox');
+colorInput.addEventListener('input', (e) => {
+  const color = e.target.value;
+  colorPreview.style.background = color;
+  hexValue.textContent = color;
+});
+
+hexBox.addEventListener('click', () => {
+  const hex = hexValue.textContent;
+  navigator.clipboard.writeText(hex).then(() => {
+    tooltip.classList.add('show');
+    setTimeout(() => tooltip.classList.remove('show'), 1500);
+  });
+});
+
+fileButton.addEventListener('click', () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.multiple = false;
+  input.click();
+  input.addEventListener('change', () => {
+    if (input.files.length > 0) {
+      imageBox.style.display = 'flex';
+      imageBox.innerHTML = '';
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        imageBox.appendChild(img);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  });
+});
+
+</script>
+</body>
+</html>
