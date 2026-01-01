@@ -20,8 +20,9 @@ body {
 
 .container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     gap: 40px;
     width: auto;
 }
@@ -91,9 +92,42 @@ input[type="color"] {
     font-size: 16px;
     color: #111827;
     transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .file-button:hover { background: #f3f4f6; }
+
+.file-button img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.pick-button {
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.pick-button:hover { background: #f3f4f6; }
+
+.pick-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
 .image-box {
     width: 300px;
     min-height: 350px;
@@ -130,7 +164,15 @@ input[type="color"] {
     </div>
 
     <input type="color" id="colorInput" value="#94dbff">
-    <button class="file-button" id="fileButton">Select Images</button>
+    <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+      <button class="file-button" id="fileButton" style="flex: 1; margin: 0;">
+        Select Images
+        <img src="image.png" alt="image" style="width: 28px; height: 28px;">
+      </button>
+      <button class="pick-button" id="pickButton">
+        <img src="pick.png" alt="pick" style="width: 28px; height: 28px;">
+      </button>
+    </div>
     <div class="tooltip" id="tooltip">Copied to clipboard</div>
   </div>
 
@@ -144,7 +186,11 @@ const hexValue = document.getElementById('hexValue');
 const hexBox = document.getElementById('hexBox');
 const tooltip = document.getElementById('tooltip');
 const fileButton = document.getElementById('fileButton');
+const pickButton = document.getElementById('pickButton');
 const imageBox = document.getElementById('imageBox');
+
+let currentImage = null;
+
 colorInput.addEventListener('input', (e) => {
   const color = e.target.value;
   colorPreview.style.background = color;
@@ -168,16 +214,58 @@ fileButton.addEventListener('click', () => {
   input.addEventListener('change', () => {
     if (input.files.length > 0) {
       imageBox.style.display = 'flex';
+      pickButton.style.display = 'flex';
       imageBox.innerHTML = '';
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = document.createElement('img');
         img.src = e.target.result;
+        img.style.cursor = 'crosshair';
+        currentImage = img;
         imageBox.appendChild(img);
       };
       reader.readAsDataURL(input.files[0]);
     }
   });
+});
+
+pickButton.addEventListener('click', () => {
+  if (currentImage) {
+    tooltip.textContent = 'Click on the image to pick a color';
+    tooltip.classList.add('show');
+    setTimeout(() => tooltip.classList.remove('show'), 2000);
+  }
+});
+
+imageBox.addEventListener('click', (e) => {
+  if (e.target.tagName === 'IMG') {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = e.target.naturalWidth;
+    canvas.height = e.target.naturalHeight;
+    ctx.drawImage(e.target, 0, 0);
+    
+    const rect = e.target.getBoundingClientRect();
+    const x = Math.floor((e.clientX - rect.left) / rect.width * canvas.width);
+    const y = Math.floor((e.clientY - rect.top) / rect.height * canvas.height);
+    
+    const pixel = ctx.getImageData(x, y, 1, 1).data;
+    const hex = '#' + [pixel[0], pixel[1], pixel[2]].map(x => {
+      const h = x.toString(16);
+      return h.length === 1 ? '0' + h : h;
+    }).join('');
+    
+    colorPreview.style.background = hex;
+    hexValue.textContent = hex;
+    colorInput.value = hex;
+    
+    tooltip.textContent = 'Color picked!';
+    tooltip.classList.add('show');
+    setTimeout(() => {
+      tooltip.classList.remove('show');
+      tooltip.textContent = 'Copied to clipboard';
+    }, 1500);
+  }
 });
 
 </script>
