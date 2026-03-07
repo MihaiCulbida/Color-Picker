@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Color Picker</title>
 <link rel="stylesheet" href="style.css">
+<link rel="icon" type="image" href="logo.png">
 </head>
 <body>
 
@@ -15,21 +16,21 @@
       <span id="hexValue">#94dbff</span>
       <small>Click to Copy</small>
     </div>
-
     <input type="color" id="colorInput" value="#94dbff">
     <div style="display: flex; gap: 10px; margin-bottom: 14px;">
-      <button class="file-button" id="fileButton" style="flex: 1; margin: 0;">
-        Select Images
-        <img src="image.png" alt="image" style="width: 28px; height: 28px;">
-      </button>
+      <button class="file-button" id="fileButton" style="flex: 1; margin: 0;"> Select Images <img src="image.png" alt="image" style="width: 28px; height: 28px;"></button>
       <button class="pick-button" id="pickButton">
         <img src="pick.png" alt="pick" style="width: 28px; height: 28px;">
       </button>
     </div>
     <div class="tooltip" id="tooltip">Copied to clipboard</div>
   </div>
-
   <div class="image-box" id="imageBox" style="display: none;"></div>
+</div>
+
+<div id="zoomLens">
+  <canvas id="zoomCanvas" width="120" height="120"></canvas>
+  <div id="zoomCrosshair"></div>
 </div>
 
 <script src="script.js"></script>
