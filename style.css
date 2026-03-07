@@ -1,0 +1,145 @@
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f2f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    width: auto;
+}
+
+.color-picker-widget {
+    width: 320px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 20px 24px;
+    text-align: center;
+}
+
+.preview {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    background: #94dbff;
+    margin-bottom: 16px;
+    transition: background 0.2s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.hex-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #111827;
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 14px;
+}
+
+.hex-box:hover { background: #f3f4f6; }
+.hex-box small { color: #6b7280; font-size: 12px; }
+input[type="color"] {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+    margin-bottom: 14px;
+}
+
+.tooltip {
+    font-size: 12px;
+    color: #929292;
+    margin-top: 6px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+}
+.tooltip.show { opacity: 1; }
+.file-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    cursor: pointer;
+    font-size: 16px;
+    color: #111827;
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.file-button:hover { background: #f3f4f6; }
+
+.file-button img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.pick-button {
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.pick-button:hover { background: #f3f4f6; }
+
+.pick-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.image-box {
+    width: 300px;
+    min-height: 350px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.image-box img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
